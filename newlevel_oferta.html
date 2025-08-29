@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título de la página actualizado -->
+    <title>New Level: Oferta del Día</title>
+    <!-- Favicon con el logo de New Level -->
+    <link rel="icon" type="image/png" href="https://newlevel.com.ar/wp-content/uploads/2021/04/NewLogo-slogan4.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #000000;
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 1rem;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4 md:p-8 text-white">
+    <div class="w-full max-w-4xl bg-gray-800 rounded-3xl shadow-2xl p-6 md:p-10 flex flex-col items-center">
+        <!-- Encabezado y Logo -->
+        <header class="text-center mb-8 w-full">
+            <img src="https://newlevel.com.ar/wp-content/uploads/2021/04/NewLogo-slogan4.png" alt="Logo de New Level" class="h-32 md:h-40 mb-2 mx-auto">
+            <p class="text-3xl text-gray-400 font-bold">Oferta del Día</p>
+        </header>
+
+        <!-- Contenedor de la oferta -->
+        <div id="game-container" class="w-full flex flex-col md:flex-row items-center gap-8 md:gap-12 transition-all duration-500">
+            <!-- Imagen de la portada y detalles -->
+            <div class="flex-shrink-0 w-full md:w-1/3">
+                <img id="game-cover" src="https://placehold.co/400x500/1F2937/D1D5DB?text=Cargando..." alt="Portada del juego" class="rounded-2xl shadow-lg border border-gray-700 w-full">
+                <div class="text-center mt-6">
+                    <p id="countdown" class="text-3xl font-extrabold text-white bg-indigo-600 rounded-full px-6 py-2 shadow-lg tracking-wide"></p>
+                </div>
+            </div>
+            
+            <!-- Información del juego y video -->
+            <div class="w-full md:w-2/3">
+                <h2 id="game-title" class="text-4xl md:text-5xl font-extrabold mb-2 text-white leading-tight">Cargando Título...</h2>
+                <p id="game-price" class="text-3xl font-bold text-green-400 mb-6">Cargando precio...</p>
+                <!-- Botón de contacto -->
+                <a href="https://wa.me/5491122659765" target="_blank" class="w-full text-center px-6 py-3 text-white font-bold text-lg bg-green-500 rounded-xl shadow-lg hover:bg-green-600 transition-colors duration-300">
+                    Contactar por WhatsApp
+                </a>
+                <div class="video-container shadow-xl mt-8">
+                    <iframe id="game-video" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-12 text-gray-500 text-sm">
+            <p>&copy; 2024 New Level. Todos los derechos reservados.</p>
+        </footer>
+    </div>
+
+    <script>
+        const gameData = [
+            {
+                title: 'Cyberpunk 2077',
+                price: '$29.99',
+                coverUrl: 'https://cdn.cdprojektred.com/cdpr/Cyberpunk2077/images/home_hero_bg_s.webp',
+                youtubeId: 'L8l_1-K6oXo'
+            },
+            {
+                title: 'Red Dead Redemption 2',
+                price: '$6.000 ars',
+                coverUrl: 'https://newlevel.com.ar/wp-content/uploads/2022/10/Red-Dead-Redemption-2.png',
+                youtubeId: 'MyaYlbizpvs'
+            },
+            {
+                title: 'Elden Ring',
+                price: '$39.99',
+                coverUrl: 'https://cdn.cdkeys.com/700x350/cover-elden-ring-pc.jpg',
+                youtubeId: 'E3Huy2buibg'
+            },
+            {
+                title: 'The Witcher 3: Wild Hunt',
+                price: '$9.99',
+                coverUrl: 'https://images.gog-statics.com/62688005b82142207908c2780e22703f4233519e5de35b1c51c8904791e2b100_product_card_v2_image_480.jpg',
+                youtubeId: 'c1d9q3jV9a8'
+            },
+            {
+                title: 'God of War Ragnarök',
+                price: '$49.99',
+                coverUrl: 'https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/4Bf6yP1eQ69uH4tq5TjC4d6z.png',
+                youtubeId: 'Pj_tJt2xU4Y'
+            }
+        ];
+
+        function getDailyGame() {
+            // Elige un juego basado en el día del año para rotar automáticamente.
+            const today = new Date();
+            const startOfYear = new Date(today.getFullYear(), 0, 0);
+            const diff = today - startOfYear;
+            const oneDay = 1000 * 60 * 60 * 24;
+            const dayOfYear = Math.floor(diff / oneDay);
+            const gameIndex = dayOfYear % gameData.length;
+            return gameData[gameIndex];
+        }
+
+        function updateCountdown() {
+            const now = new Date();
+            const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
+            const timeRemaining = midnight - now;
+
+            const hours = Math.floor((timeRemaining / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((timeRemaining / 1000 / 60) % 60);
+            const seconds = Math.floor((timeRemaining / 1000) % 60);
+
+            const countdownElement = document.getElementById('countdown');
+            countdownElement.textContent = `Cambia en: ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function renderGame() {
+            const game = getDailyGame();
+            
+            document.getElementById('game-title').textContent = game.title;
+            document.getElementById('game-price').textContent = game.price;
+            document.getElementById('game-cover').src = game.coverUrl;
+            document.getElementById('game-video').src = `https://www.youtube.com/embed/${game.youtubeId}?rel=0&showinfo=0&autoplay=1`;
+        }
+
+        window.onload = () => {
+            renderGame();
+            // Actualizar el contador cada segundo
+            setInterval(updateCountdown, 1000);
+        };
+    </script>
+</body>
+</html>
